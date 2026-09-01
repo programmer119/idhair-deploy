@@ -76,38 +76,74 @@
   attributionStyle.textContent = `
     #sf-attribution {
       position: fixed;
-      right: 14px;
-      bottom: 14px;
+      right: 18px;
+      bottom: 18px;
       z-index: 4;
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      max-width: calc(100vw - 28px);
-      padding: 8px 11px;
-      border: 1px solid rgba(20, 24, 31, .14);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, .94);
-      box-shadow: 0 8px 26px rgba(20, 24, 31, .14);
-      color: #171a20;
+      gap: 10px;
+      color: #111318;
       text-decoration: none;
-      font-size: 11px;
-      line-height: 1.25;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+      transition: opacity .18s ease, transform .18s ease;
     }
-    #sf-attribution img { width: 22px; height: 22px; display: block; }
-    #sf-attribution span { display: grid; gap: 1px; }
-    #sf-attribution strong { font-size: 12px; letter-spacing: -.01em; }
-    #sf-attribution small { color: #656b73; font-size: 10px; }
+    #sf-attribution:hover {
+      opacity: .78;
+      transform: translateY(-1px);
+    }
+    #sf-attribution:focus-visible {
+      outline: 2px solid #111318;
+      outline-offset: 5px;
+      border-radius: 8px;
+    }
+    #sf-attribution .sf-logo-shell {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      padding: 4px;
+      overflow: hidden;
+      border-radius: 7px;
+      background: #0b0c0f;
+      box-shadow: 0 8px 20px rgba(17, 19, 24, .18);
+      box-sizing: border-box;
+    }
+    #sf-attribution .sf-logo-shell img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    #sf-attribution .sf-wordmark {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -.045em;
+      white-space: nowrap;
+    }
     @media (max-width: 640px) {
-      #sf-attribution { right: 10px; bottom: 10px; padding: 7px 9px; }
-      #sf-attribution small { display: none; }
+      #sf-attribution {
+        right: 12px;
+        bottom: 12px;
+        gap: 8px;
+      }
+      #sf-attribution .sf-logo-shell {
+        width: 34px;
+        height: 34px;
+      }
+      #sf-attribution .sf-wordmark {
+        font-size: 16px;
+      }
     }
   `;
   document.head.appendChild(attributionStyle);
 
   const renderAttribution = () => {
     if (document.getElementById('sf-attribution')) return;
+
     const attribution = document.createElement('a');
     attribution.id = 'sf-attribution';
     attribution.href = 'https://suaveforge.com/work/idhair/';
@@ -115,19 +151,22 @@
     attribution.rel = 'author noopener';
     attribution.setAttribute('aria-label', 'SuaveForge idHAIR 프로젝트 상세 보기');
 
-    const mark = document.createElement('img');
-    mark.src = 'https://suaveforge.com/assets/suaveforge-mark.svg';
-    mark.alt = 'SuaveForge';
-    mark.width = 22;
-    mark.height = 22;
+    const shell = document.createElement('span');
+    shell.className = 'sf-logo-shell';
 
-    const label = document.createElement('span');
-    const brand = document.createElement('strong');
-    brand.textContent = 'Developed by SuaveForge';
-    const detail = document.createElement('small');
-    detail.textContent = '다지점 설문·고객관리 프로젝트';
-    label.append(brand, detail);
-    attribution.append(mark, label);
+    const mark = document.createElement('img');
+    mark.src = 'https://suaveforge.com/assets/logo-motion/suaveforge-logo-final.svg';
+    mark.alt = '';
+    mark.width = 30;
+    mark.height = 30;
+    mark.decoding = 'async';
+
+    const wordmark = document.createElement('span');
+    wordmark.className = 'sf-wordmark';
+    wordmark.textContent = 'SuaveForge';
+
+    shell.appendChild(mark);
+    attribution.append(shell, wordmark);
     document.body.appendChild(attribution);
   };
 

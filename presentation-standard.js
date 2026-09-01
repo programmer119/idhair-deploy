@@ -74,41 +74,54 @@
 
   const attributionStyle = document.createElement('style');
   attributionStyle.textContent = `
+    body.sf-attribution-layout {
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) 44px;
+      background: #f7f5f1;
+    }
+    body.sf-attribution-layout #idhair-app {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      grid-row: 1;
+    }
+    #sf-attribution-rail {
+      grid-row: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      border-top: 1px solid rgba(17, 19, 24, .08);
+      background: #f7f5f1;
+      box-sizing: border-box;
+    }
     #sf-attribution {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 4;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 7px;
       color: #111318;
       text-decoration: none;
       line-height: 1;
       -webkit-font-smoothing: antialiased;
       text-rendering: geometricPrecision;
-      transition: opacity .18s ease, transform .18s ease;
+      transition: opacity .18s ease;
     }
-    #sf-attribution:hover {
-      opacity: .78;
-      transform: translateY(-1px);
-    }
+    #sf-attribution:hover { opacity: .7; }
     #sf-attribution:focus-visible {
       outline: 2px solid #111318;
-      outline-offset: 5px;
-      border-radius: 8px;
+      outline-offset: 4px;
+      border-radius: 6px;
     }
     #sf-attribution .sf-logo-shell {
-      width: 38px;
-      height: 38px;
+      width: 26px;
+      height: 26px;
       flex: 0 0 auto;
       display: grid;
       place-items: center;
-      padding: 4px;
+      padding: 3px;
       overflow: hidden;
-      border-radius: 7px;
+      border-radius: 5px;
       background: #0b0c0f;
-      box-shadow: 0 8px 20px rgba(17, 19, 24, .18);
       box-sizing: border-box;
     }
     #sf-attribution .sf-logo-shell img {
@@ -119,30 +132,34 @@
     }
     #sf-attribution .sf-wordmark {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -.045em;
+      font-size: 14px;
+      font-weight: 750;
+      letter-spacing: -.035em;
       white-space: nowrap;
     }
     @media (max-width: 640px) {
-      #sf-attribution {
-        right: 12px;
-        bottom: 12px;
-        gap: 8px;
+      body.sf-attribution-layout {
+        grid-template-rows: minmax(0, 1fr) 40px;
       }
       #sf-attribution .sf-logo-shell {
-        width: 34px;
-        height: 34px;
+        width: 24px;
+        height: 24px;
       }
       #sf-attribution .sf-wordmark {
-        font-size: 16px;
+        font-size: 13px;
       }
     }
   `;
   document.head.appendChild(attributionStyle);
 
   const renderAttribution = () => {
-    if (document.getElementById('sf-attribution')) return;
+    if (document.getElementById('sf-attribution-rail')) return;
+
+    document.body.classList.add('sf-attribution-layout');
+
+    const rail = document.createElement('footer');
+    rail.id = 'sf-attribution-rail';
+    rail.setAttribute('aria-label', '제작사 정보');
 
     const attribution = document.createElement('a');
     attribution.id = 'sf-attribution';
@@ -157,8 +174,8 @@
     const mark = document.createElement('img');
     mark.src = 'https://suaveforge.com/assets/logo-motion/suaveforge-logo-final.svg';
     mark.alt = '';
-    mark.width = 30;
-    mark.height = 30;
+    mark.width = 20;
+    mark.height = 20;
     mark.decoding = 'async';
 
     const wordmark = document.createElement('span');
@@ -167,7 +184,8 @@
 
     shell.appendChild(mark);
     attribution.append(shell, wordmark);
-    document.body.appendChild(attribution);
+    rail.appendChild(attribution);
+    document.body.appendChild(rail);
   };
 
   if (document.body) renderAttribution();

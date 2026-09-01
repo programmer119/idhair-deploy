@@ -43,6 +43,7 @@
       const base = String(window.IDHAIR_API_BASE || '').replace(/\/$/, '');
       const frame = document.getElementById('idhair-app');
       const status = document.getElementById('status');
+      const portfolioMode = window.IDHAIR_PRESENTATION_MODE === 'portfolio';
 
       if (!/^https:\/\//.test(base)) {
         status.textContent = '서비스 주소 설정을 확인해 주세요.';
@@ -54,7 +55,7 @@
         status.hidden = true;
         status.remove();
       }, { once: true });
-      frame.src = `${base}/`;
+      frame.src = `${base}/?potpolio=${portfolioMode ? '1' : '0'}`;
       setTimeout(() => {
         if (frame.hidden) status.textContent = '서버 연결이 지연되고 있습니다. 잠시 후 새로고침해 주세요.';
       }, 15000);
